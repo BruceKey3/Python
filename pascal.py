@@ -21,8 +21,13 @@ class Solution(object):
 
 solution = Solution()
 if(len(sys.argv) == 2):
-    list = solution.generate(int(sys.argv[1]))
+    try:
+        list = solution.generate(int(sys.argv[1]))
+    except ValueError:
+        print("Please call the program with an integer.")
+        exit(-1)
 else:
     list = solution.generate()
     
-print(list)
+for i in list:
+    print(i)
