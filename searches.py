@@ -31,6 +31,25 @@ def depth_first_traversal(root):
     for i in root.children:
         depth_first_traversal(i)
 
+def depth_first_search(root, item):
+    path = []
+    depth_first_search_helper(root, path, item)
+    path.append(root)
+    path.reverse()
+    return path
+
+def depth_first_search_helper(root, path, item):
+    if not root:
+        return None
+    if root.value == item:
+        return root
+
+    for i in root.children:
+        node = depth_first_search_helper(i,path,item)
+        if not (node is None):
+            path.append(i)
+            return node
+    
 
 child1 = Node(3)
 child2 = Node(7)
@@ -49,6 +68,13 @@ print("Depth first:")
 depth_first_traversal(root)
 print("Breadth first:")
 breadth_first_traversal(root)
+
+print("Depth first path to 15:")
+path = depth_first_search(root,15)
+
+for i in path:
+    print(i.value)
+
 
 '''
     5
