@@ -1,3 +1,4 @@
+# Class for a node, holds a value and the children
 class Node(object):
     value = 0;
     children = [];
@@ -8,6 +9,9 @@ class Node(object):
 
     def addChild(self, child):
         self.children.append(child)
+
+        
+#breadth first functions
 
 def breadth_first_traversal(root):
     res = [[root]]
@@ -24,32 +28,60 @@ def breadth_first_helper(node, acc, level):
             acc[level].append(i)
         breadth_first_helper(i,acc,level+1)
 
-def depth_first_traversal(root):
-    if(not root):
-        return
-    print(root.value)
-    for i in root.children:
-        depth_first_traversal(i)
 
+# depth first functions
+
+# Helper functions for depth first
+
+def isNone(x):
+    return (not (x is None))
+
+def compare_item(root, item):
+    if root.value == item:
+       return root
+
+def check_list( node, i, path):
+    if not (node is None):
+        path.append(i)
+        return node
+    
+# actual functions for depth first
+def depth_first_traversal(root):
+    # print the node's value
+    f = lambda *x : print(x[0].value)
+    # do nothing
+    g = lambda *args: None
+    depth_first_search_helper(root, [], None, f, g)
+    
 def depth_first_search(root, item):
     path = []
-    depth_first_search_helper(root, path, item)
+    depth_first_search_helper(root, path, item, compare_item, check_list)
     path.append(root)
     path.reverse()
     return path
 
-def depth_first_search_helper(root, path, item):
+'''
+ Helper function for all depth first algorithms.
+ It runs a basecase function before the loop passing in the root and item
+ and returns the result if there is one.
+ Also runs a recursive_case function after every iteration in the loop passing
+ it the result of the recursive call, the child and the path so far.
+ If this recursive_case has a result, it returns it.
+'''
+def depth_first_search_helper(root, path, item, basecase, recursive_case):
     if not root:
         return None
-    if root.value == item:
-        return root
-
+    res = basecase(root, item)
+    if isNone(res) :
+        return res
     for i in root.children:
-        node = depth_first_search_helper(i,path,item)
-        if not (node is None):
-            path.append(i)
-            return node
-    
+        node = depth_first_search_helper(i,path,item, basecase, recursive_case)
+        res = recursive_case(node,i, path)
+        if isNone(res) :
+            return res
+
+
+# main
 
 child1 = Node(3)
 child2 = Node(7)
