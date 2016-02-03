@@ -10,6 +10,9 @@ class Node(object):
     def addChild(self, child):
         self.children.append(child)
 
+    def printVal(self):
+        print(self.value)
+
         
 #breadth first functions
 
@@ -33,7 +36,7 @@ def breadth_first_helper(node, acc, level):
 
 # Helper functions for depth first
 
-def isNone(x):
+def isNotNone(x):
     return (not (x is None))
 
 def compare_item(root, item):
@@ -41,23 +44,24 @@ def compare_item(root, item):
        return root
 
 def check_list( node, i, path):
-    if not (node is None):
+    if isNotNone(node):
         path.append(i)
         return node
     
 # actual functions for depth first
 def depth_first_traversal(root):
     # print the node's value
-    f = lambda *x : print(x[0].value)
+    f = lambda node, *x : node.printVal()
     # do nothing
     g = lambda *args: None
     depth_first_search_helper(root, [], None, f, g)
     
 def depth_first_search(root, item):
     path = []
-    depth_first_search_helper(root, path, item, compare_item, check_list)
-    path.append(root)
-    path.reverse()
+    res = depth_first_search_helper(root, path, item, compare_item, check_list)
+    if isNotNone(res):
+        path.append(root)
+        path.reverse()
     return path
 
 '''
@@ -72,14 +76,17 @@ def depth_first_search_helper(root, path, item, basecase, recursive_case):
     if not root:
         return None
     res = basecase(root, item)
-    if isNone(res) :
+    if isNotNone(res) :
         return res
     for i in root.children:
         node = depth_first_search_helper(i,path,item, basecase, recursive_case)
         res = recursive_case(node,i, path)
-        if isNone(res) :
+        if isNotNone(res) :
             return res
 
+def printPath(path):
+    for i in path:
+        i.printVal()
 
 # main
 
@@ -103,10 +110,10 @@ breadth_first_traversal(root)
 
 print("Depth first path to 15:")
 path = depth_first_search(root,15)
-
-for i in path:
-    print(i.value)
-
+printPath(path)
+print("Depth first path to 5:")
+path = depth_first_search(root,5)
+printPath(path)
 
 '''
     5
